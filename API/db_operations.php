@@ -366,6 +366,9 @@ function team_details(){
 					 		$temp['average'] = $row['bow_average'];
 					 		$temp['economy'] = $row['bow_economy'];
 					 		$temp['strike_rate'] = $row['bow_strike_rate'];
+					 		$temp['four_wickets_count'] = $row['bow_four_wickets_count'];
+					 		$temp['five_wickets_count'] = $row['bow_five_wickets_count'];
+					 		
 					 		
 					 		
 					 		
@@ -380,8 +383,6 @@ function team_details(){
 					 		$temp['average'] = $row['bow_average'];
 					 		$temp['economy'] = $row['bow_economy'];
 					 		$temp['strike_rate'] = $row['bow_strike_rate'];
-					 		$temp['four_wickets_count'] = $row['bow_four_wickets_count'];
-					 		$temp['five_wickets_count'] = $row['bow_five_wickets_count'];
 					 		
 					 		
 					 	}
@@ -397,6 +398,28 @@ function team_details(){
 				
 				}
 				
+			}
+			function get_drawer_details()
+			{
+				$products = array(); 
+					$sql ="select * from drawer_items";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					     $temp['drawer_heading'] =$row['drawer_title'];
+					     $temp['drawer_bg'] ="http://192.168.43.126/IPL2019/IMAGES/Drawer/".$row['drawer_bg'];
+					     $temp['drawer_icon'] ="http://192.168.43.126/IPL2019/IMAGES/Drawer/".$row['drawer_icon'];
+					       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+		
+				}
+				
+
 			}
 
 					
