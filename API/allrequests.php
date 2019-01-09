@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST') {
 			echo $res;
 			
 		}
+		if (isset($_POST['get_drawer_full_details'])) {
+			$res =$con->get_drawer_full_details($_POST['drawer_item']);
+			echo $res;
+			
+		}
 		
 		
 	

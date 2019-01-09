@@ -421,6 +421,155 @@ function team_details(){
 				
 
 			}
+			function get_drawer_full_details($drawer_item)
+			{
+					$products = array(); 
+					if ($drawer_item =="SCHEDULE" ) {
+					$sql ="select * from schedule";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					     $temp['match_no'] =$row['sch_match_number'];
+					     $temp['team1_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_first_team_logo'];
+					     $temp['team2_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_second_team_logo'];
+					     $temp['date_time'] =$row['sch_date_time'];
+					     $temp['venue'] =$row['sch_stadium_venue'];
+					       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+					
+		
+				}
+				if ($drawer_item == "HIGHLIGHTS") {
+					$sql = "SELECT result_match_num,result_declare,result_first_team_name,result_second_team_name,result_highlights_link,schedule.sch_date_time,scores.score_team1_score,scores.over_team1_over,scores.score_team2_score,scores.over_team2_over FROM results INNER JOIN SCHEDULE ON results.result_match_num = schedule.sch_match_number INNER JOIN scores ON scores.score_match_no =results.result_match_num";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					     $temp['match_no'] =$row['result_match_num'];
+					     $temp['result_declare'] = $row['result_declare'];
+					     $temp['team1Name'] =$row['result_first_team_name'];
+					     $temp['team2Name'] =$row['result_second_team_name'];
+					     //$temp['winning_team_id'] =$row['result_winning_team_id'];
+					     $temp['highlights_link'] =$row['result_highlights_link'];
+					     $temp['date_time'] =$row['sch_date_time'];
+					     $temp['score_team1_score'] =$row['score_team1_score'];
+					     $temp['over_team1_over'] =$row['over_team1_over'];
+					     $temp['score_team2_score'] =$row['score_team2_score'];
+					     $temp['over_team2_over'] =$row['over_team2_over'];
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+				}
+					
+					if ($drawer_item =="POINTS TABLE" ) {
+					$sql ="SELECT * FROM `points_table` ORDER BY  pt_points,pt_net_run_rate";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					     $temp['team_Name'] =$row['pt_team_name'];
+					    $temp['match_Played'] =$row['pt_mat_played'];
+					    $temp['match_Won'] =$row['pt_mat_won'];
+					    $temp['match_Lost'] =$row['pt_mat_lost'];
+					     $temp['match_Tied'] =$row['pt_mat_tied'];
+					     $temp['no_Result'] =$row['pt_no_result'];
+						$temp['points'] =$row['pt_points'];
+						$temp['net_run_rate'] =$row['pt_net_run_rate'];					       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+						
+					
+		
+				}
+				if ($drawer_item =="MOST VALUABLE PLAYER" ) {
+					$sql ="SELECT val_name,teams.team_title_short,val_points,val_matches_played,val_wickets,val_dots,val_fours,val_sixes,val_catches,val_stumping FROM valuable_player INNER JOIN teams on valuable_player.val_team_id =teams.team_id ORDER BY valuable_player.val_points DESC";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					     $temp['player_name'] =$row['val_name'];
+					    $temp['team_name'] =$row['team_title_short'];
+					    $temp['val_points'] =$row['val_points'];
+					    $temp['matches_played'] =$row['val_matches_played'];
+					     $temp['val_wickets'] =$row['val_wickets'];
+					     $temp['val_dots'] =$row['val_dots'];
+						$temp['val_fours'] =$row['val_fours'];
+						$temp['val_sixes'] =$row['val_sixes'];	
+						$temp['val_catches'] =$row['val_catches'];
+						$temp['val_stumping'] =$row['val_stumping'];					       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+					
+		
+				}
+				if ($drawer_item =="FAIR PLAY AWARD" ) {
+					$sql ="SELECT teams.team_title_short,fp_matches_played,fp_team_points,fp_team_avg_points FROM fair_play_award INNER JOIN teams ON teams.team_id =fair_play_award.fp_team_id ORDER BY fp_team_points DESC";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					    $temp['team_name'] =$row['team_title_short'];
+					    $temp['matches_played'] =$row['fp_matches_played'];
+						$temp['points'] =$row['fp_team_points'];
+						$temp['fp_team_avg'] =$row['fp_team_avg_points'];	
+										       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+					
+		
+				}
+				if ($drawer_item =="MAN OF THE MATCH  AWARDS") {
+					$sql ="SELECT *  FROM man_of_the_matches WHERE mom_player_awards != 0 ORDER BY mom_player_awards DESC LIMIT 10";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					    $temp['player_name'] =$row['mom_player_name'];
+					    $temp['team_logo'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['mom_team_image'];
+						$temp['matches_played'] =$row['mom_player_matches'];
+						$temp['awards_count'] =$row['mom_player_awards'];	
+										       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+					
+		
+				}
+					
+				
+					
+								
+
+			}
 
 					
 					
