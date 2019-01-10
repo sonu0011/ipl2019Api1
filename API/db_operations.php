@@ -570,6 +570,64 @@ function team_details(){
 								
 
 			}
+			function full_team_details($request_type,$team_id)
+			{
+								$products = array(); 
+								$sql = "";
+								if ($request_type == "squad_request") {
+									$sql ="SELECT batsman.bat_name,batsman.bat_image FROM batsman WHERE bat_team_id = $team_id UNION SELECT bowler.bow_name,bowler.bow_image FROM bowler WHERE bowler.bow_team_id = $team_id";
+								}
+								if ($request_type == "schdule_request") {
+									$sql ="SELECT * FROM `schedule` WHERE sch_first_team_id = $team_id OR sch_second_team_id = $team_id";
+
+								}
+								if ($request_type == "results_request") {
+									$sql ="SELECT result_match_num,result_declare,result_first_team_name,result_second_team_name,result_highlights_link,schedule.sch_date_time,scores.score_team1_score,scores.over_team1_over,scores.score_team2_score,scores.over_team2_over FROM results INNER JOIN SCHEDULE ON results.result_match_num = schedule.sch_match_number INNER JOIN scores ON scores.score_match_no =results.result_match_num WHERE results.result_first_team_id = $team_id OR results.result_second_team_id = $team_id";
+
+								}
+
+				
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();
+					    if ($request_type == "squad_request") {
+					    	$temp['player_name'] =$row['bat_name'];
+					    	$temp['player_image'] ="http://192.168.43.126/IPL2019/IMAGES/".$row['bat_image'];
+					    }
+					    if ($request_type == "schdule_request") {
+					    	$temp['match_no'] =$row['sch_match_number'];
+					     $temp['team1_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_first_team_logo'];
+					     $temp['team2_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_second_team_logo'];
+					     $temp['date_time'] =$row['sch_date_time'];
+					     $temp['venue'] =$row['sch_stadium_venue'];
+					       
+					    }
+					    if ($request_type == "results_request") {
+									$temp['match_no'] =$row['result_match_num'];
+					     $temp['result_declare'] = $row['result_declare'];
+					     $temp['team1Name'] =$row['result_first_team_name'];
+					     $temp['team2Name'] =$row['result_second_team_name'];
+					     //$temp['winning_team_id'] =$row['result_winning_team_id'];
+					     $temp['highlights_link'] =$row['result_highlights_link'];
+					     $temp['date_time'] =$row['sch_date_time'];
+					     $temp['score_team1_score'] =$row['score_team1_score'];
+					     $temp['over_team1_over'] =$row['over_team1_over'];
+					     $temp['score_team2_score'] =$row['score_team2_score'];
+					     $temp['over_team2_over'] =$row['over_team2_over'];
+
+								}
+					    				       
+					  
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+
+					}
+					
+				
+			}
 
 					
 					
