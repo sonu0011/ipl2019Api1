@@ -57,8 +57,14 @@ function team_details(){
 					if ($result) {
 					while ($row =mysqli_fetch_assoc($result)) {
 					    $temp = array();
+					     $temp['team_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['team_image'];
 					    $temp['team_id'] =$row['team_id'];
-					      					        $temp['team_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['team_image'];
+					    $temp['team_heading'] =$row['team_heading'];
+					    $temp['team_captain'] =$row['team_captain'];
+					    
+					    $temp['team_coach'] =$row['team_coach'];
+					      					       
+					      					 
 					       
 					  
 					    array_push($products, $temp);
@@ -628,6 +634,32 @@ function team_details(){
 					
 				
 			}
+		function getTeamItemDetails($team_id)
+		{
+			$products = array(); 
+					$sql ="SELECT teams.team_highest_scorer,teams.team_lowest_score,teams.team_total_fours,teams.team_total_sixes,teams.team_most_four_inning,teams.team_most_sixes_inning,teams.team_most_wickets_inning,teams.team_total_wickets,team_details_items.iteam_title FROM teams INNER JOIN team_details_items ON team_details_items.team_id = teams.team_id WHERE teams.team_id = $team_id";
+					$result = mysqli_query($this->con,$sql);
+					if ($result) {
+					while ($row =mysqli_fetch_assoc($result)) {
+					    $temp = array();	  
+				      $temp['team_highest_scorer'] =$row['team_highest_scorer'];
+				      $temp['team_lowest_score'] =$row['team_lowest_score'];
+				      $temp['team_total_fours'] =$row['team_total_fours'];
+				      $temp['team_total_sixes'] =$row['team_total_sixes'];
+				      $temp['team_most_four_inning'] =$row['team_most_four_inning'];
+				      $temp['team_most_sixes_inning'] =$row['team_most_sixes_inning'];
+				      $temp['team_most_wickets_inning'] =$row['team_most_wickets_inning'];					  
+				      $temp['team_total_wickets'] =$row['team_total_wickets'];
+				      $temp['iteam_title'] =$row['iteam_title'];
+				      
+					    array_push($products, $temp);
+
+					}
+					echo json_encode($products);
+		
+				}
+				
+		}
 
 					
 					

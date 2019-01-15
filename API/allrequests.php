@@ -45,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST') {
 			echo $res;
 			
 		}
+		if (isset($_POST['getTeamItemDetails'])) {
+			$res =$con->getTeamItemDetails($_POST['team_id']);
+			echo $res;
+			
+		}
 		
 		
 	
