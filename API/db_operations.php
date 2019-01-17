@@ -282,10 +282,13 @@ function team_details(){
 						|| $query == "Fastest Ball"      || $query == "Best Strike Rate"
 						|| $query == "Best Economy Rate" || $query == "Best Bowling Average"
 						|| $query == "Best Bowling Innings" || $query =="Best Bowling Innings"
-						|| $query == "Purple Cap" ){
+						|| $query == "Purple Cap"  || $query == "Most Hat Tricks"){
 						
 						if ($query == "Most Maiden Overs") {
 						$sql = "SELECT bow_name,bow_image,bow_maiden_over_count FROM bowler WHERE bow_maiden_over_count != 0 ORDER by bow_maiden_over_count DESC LIMIT 10";
+						}
+						if ($query == "Most Hat Tricks") {
+						$sql = "SELECT * FROM bowler WHERE bow_hatric_count != 0 ORDER by bow_hatric_count DESC LIMIT 10";
 						}
 						if ($query == "Most Dot Balls") {
 						$sql = "SELECT bow_name,bow_image,bow_dot_balls	 FROM `bowler` WHERE bow_dot_balls	 != 0  ORDER by bow_dot_balls DESC LIMIT 10";	
@@ -316,6 +319,7 @@ function team_details(){
 								$sql = "SELECT * FROM `bowler`  ORDER by bow_total_wickets DESC LIMIT 10";	
 								
 							}
+
 					
 						
 									$result = mysqli_query($this->con,$sql);
@@ -392,6 +396,13 @@ function team_details(){
 					 		
 					 		
 					 	}
+					 	if ($query == "Most Hat Tricks") {
+							
+							$temp['team_id'] = $row['bow_team_id'];
+							$temp['bow_name'] = $row['bow_name'];
+							$temp['bow_hatric_count'] = $row['bow_hatric_count'];
+	
+							}
 					 	
 					       
 					  
@@ -580,14 +591,14 @@ function team_details(){
 			{
 								$products = array(); 
 								$sql = "";
-								if ($request_type == "squad_request") {
+								if ($request_type == "Squad") {
 									$sql ="SELECT batsman.bat_name,batsman.bat_image FROM batsman WHERE bat_team_id = $team_id UNION SELECT bowler.bow_name,bowler.bow_image FROM bowler WHERE bowler.bow_team_id = $team_id";
 								}
-								if ($request_type == "schdule_request") {
+								if ($request_type == "Schedule") {
 									$sql ="SELECT * FROM `schedule` WHERE sch_first_team_id = $team_id OR sch_second_team_id = $team_id";
 
 								}
-								if ($request_type == "results_request") {
+								if ($request_type == "Highlights") {
 									$sql ="SELECT result_match_num,result_declare,result_first_team_name,result_second_team_name,result_highlights_link,schedule.sch_date_time,scores.score_team1_score,scores.over_team1_over,scores.score_team2_score,scores.over_team2_over FROM results INNER JOIN SCHEDULE ON results.result_match_num = schedule.sch_match_number INNER JOIN scores ON scores.score_match_no =results.result_match_num WHERE results.result_first_team_id = $team_id OR results.result_second_team_id = $team_id";
 
 								}
@@ -597,11 +608,11 @@ function team_details(){
 					if ($result) {
 					while ($row =mysqli_fetch_assoc($result)) {
 					    $temp = array();
-					    if ($request_type == "squad_request") {
+					    if ($request_type == "Squad") {
 					    	$temp['player_name'] =$row['bat_name'];
 					    	$temp['player_image'] ="http://192.168.43.126/IPL2019/IMAGES/".$row['bat_image'];
 					    }
-					    if ($request_type == "schdule_request") {
+					    if ($request_type == "Schedule") {
 					    	$temp['match_no'] =$row['sch_match_number'];
 					     $temp['team1_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_first_team_logo'];
 					     $temp['team2_image'] ="http://192.168.43.126/IPL2019/IMAGES/logo/".$row['sch_second_team_logo'];
@@ -609,7 +620,7 @@ function team_details(){
 					     $temp['venue'] =$row['sch_stadium_venue'];
 					       
 					    }
-					    if ($request_type == "results_request") {
+					    if ($request_type == "Highlights") {
 									$temp['match_no'] =$row['result_match_num'];
 					     $temp['result_declare'] = $row['result_declare'];
 					     $temp['team1Name'] =$row['result_first_team_name'];
